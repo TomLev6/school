@@ -51,7 +51,7 @@ def main():
                         thread = threading.Thread(target=md5, args=(str(st), str(mi), msg,))
                         free_cpus -= 1
                         thread.start()
-                        print(f"start thread number {free_cpus}..")
+                        print(f"start thread number {total_cpu - free_cpus}..")
                         my_socket.send(ANSWER.encode())
                         print("ANSWER: ", ANSWER)
                         starts = 0
