@@ -7,14 +7,12 @@ import threading
 
 IP = '0.0.0.0'
 PORT = 8820
-print_lock = threading.Lock()
 MAX = 1024
 ENCRYPTED_MSG = "48ec8940c1cf634c8ae2c74b798b6ad6"  # 8765432190
 LEN = 10
 OPTIONS = 10 ** LEN
 
 start = 0
-clients = 4
 end = OPTIONS / 40
 plus = 1
 found = False
