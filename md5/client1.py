@@ -9,7 +9,7 @@ import threading
 
 IP = '127.0.0.1'
 PORT = 8820
-threads = 0
+threads = []
 free_cpus = os.cpu_count()
 total_cpu = os.cpu_count()
 ANSWER = '0'
@@ -32,7 +32,7 @@ def main():
         while True:
             my_socket.send("ready".encode())
             data = my_socket.recv(1024).decode()
-            # print("The server sent " + data)
+            print("The server sent " + data)
             if "FOUND" not in data:
                 global free_cpus
                 global total_cpu
@@ -51,7 +51,8 @@ def main():
                         thread = threading.Thread(target=md5, args=(str(st), str(mi), msg,))
                         free_cpus -= 1
                         thread.start()
-                        print(f"start thread number {total_cpu - free_cpus}..")
+                        threads.append(thread)
+                        print(f"starting thread number {total_cpu - free_cpus}..")
                         my_socket.send(ANSWER.encode())
                         starts = 0
                         mid = 0
@@ -59,6 +60,8 @@ def main():
                         plus = 1 + starts
                         break
                     if free_cpus == 0:
+                        for thread in threads:
+                            thread.join()
                         free_cpus = total_cpu
                     break
 
@@ -79,21 +82,22 @@ def md5(sta, end, msg):
     :param sta: int
     :param end: int
     :param msg: str
-    :return:
+    :return: None
     """
     global ANSWER
     for i in range(int(sta.split(".")[0]), int(end.split(".")[0])):
         encrypted_msg = hashlib.md5(str(i).zfill(10).encode()).hexdigest()
         if encrypted_msg == str(msg):
+            print("FOUND THE MESSAGE!", '[', msg, ']')
             ANSWER = str(i)
 
 
 def give_range(start, end):
     """
     gives range to the client threads.
-    :param start:
-    :param end:
-    :return:
+    :param start: int
+    :param end: int
+    :return: start and mid
     """
     global starts
     global ends
