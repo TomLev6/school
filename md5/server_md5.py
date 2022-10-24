@@ -8,10 +8,11 @@ import threading
 IP = '0.0.0.0'
 PORT = 8820
 MAX = 1024
-ENCRYPTED_MSG = "48ec8940c1cf634c8ae2c74b798b6ad6"  # 8765432190
+ENCRYPTED_MSG = "2547978214cc906154503c2c783940b3"  # 1023456789
 LEN = 10
 OPTIONS = 10 ** LEN
 
+threads = []
 start = 0
 end = OPTIONS / 40
 plus = 1
@@ -51,7 +52,10 @@ def main():
                 print("Client connected")
                 thread = threading.Thread(target=handle_client, args=(client_socket,))
                 thread.start()
+                threads.append(thread)
             if found:
+                for thread in threads:
+                    thread.join()
                 break
             break
         except socket.error as err:
@@ -77,7 +81,7 @@ def handle_client(client_socket):
                     client_socket.send(r.encode())
                     data = str(client_socket.recv(MAX))
                     data = data.split("'")[1]
-                    if data != '0' and data != "ready":
+                    if data == ENCRYPTED_MSG or data != "0" and data != "ready":
                         print("the decrypted message: ", data)
                         found = True
             client_socket.send("FOUND".encode())
