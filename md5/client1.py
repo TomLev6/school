@@ -9,6 +9,7 @@ import threading
 
 IP = '127.0.0.1'
 PORT = 8820
+LEN = 10
 threads = []
 free_cpus = os.cpu_count()
 total_cpu = os.cpu_count()
@@ -60,6 +61,7 @@ def main():
                         plus = 1 + starts
                         break
                     if free_cpus == 0:
+                        print("waits for the threads to end..")
                         for thread in threads:
                             thread.join()
                         free_cpus = total_cpu
@@ -86,7 +88,7 @@ def md5(sta, end, msg):
     """
     global ANSWER
     for i in range(int(sta.split(".")[0]), int(end.split(".")[0])):
-        encrypted_msg = hashlib.md5(str(i).zfill(10).encode()).hexdigest()
+        encrypted_msg = hashlib.md5(str(i).zfill(LEN).encode()).hexdigest()
         if encrypted_msg == str(msg):
             print("FOUND THE MESSAGE!", '[', msg, ']')
             ANSWER = str(i)
