@@ -73,6 +73,8 @@ def main():
                 exit()
     except socket.error as er:
         print(str(er))
+        print("disconnecting...")
+        exit()
     finally:
         my_socket.close()
         exit()
