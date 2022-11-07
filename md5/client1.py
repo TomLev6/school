@@ -35,12 +35,7 @@ def main():
             data = my_socket.recv(1024).decode()
             print("The server sent " + data)
             if "FOUND" not in data:
-                global free_cpus
-                global total_cpu
-                global starts
-                global mid
-                global ends
-                global plus
+                global free_cpus, plus, ends, mid, starts, total_cpu
                 while True:
                     start = data.split("|")[0]
                     end = data.split("|")[1]
