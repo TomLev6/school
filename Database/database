@@ -14,3 +14,8 @@ class Database:
         val = self.get_value(key)
         self.set_value(key, None)
         return val
+
+    def __str__(self):
+        for key in self.dict.keys():
+            return "key: " + key \
+                   + "\nvalue: " + self.get_value(key)
