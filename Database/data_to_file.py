@@ -1,24 +1,41 @@
 from database import Database
 import os
+from pickle import dump, load
 
 
-class DataFile:
+class DataFile(Database):
     def __init__(self, file):
+        super().__init__()
         self.f = file
         self.free = True
 
-    def write(self, data):
+    def write(self):
         if os.path.isfile(self.f):
             if self.free:
                 self.free = False
-                file = open(self.f, "a")
-                file.write(data + '\n')
+                file = open(self.f, "wb")
+                dump(self.dict, file)
                 file.close()
+                self.free = True
 
     def read(self):
         if os.path.isfile(self.f):
             if self.free:
                 file = open(self.f, "r")
-                print(file.read())
+                self.dict = load(file)
                 file.close()
-
+                
+    def set_value(self, key, val):
+        self.read()
+        super().set_value(key, val)
+        self.write()
+        
+    def get_value(self, key):
+        self.read()
+        super().get_value(key)
+        
+    def delete_value(self, key):
+        self.read()
+        super().delete_value(key)
+        self.write()
+        
