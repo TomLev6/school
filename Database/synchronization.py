@@ -10,8 +10,8 @@ class Sync:
         self.dict = db
         self.set_ready = True
         if self.initializer:  # threading
-            self.lock = threading.Lock()
-            self.semaphore = threading.Semaphore(10)
+            self.lock = threading.Lock()  # lock for def that only one person can access the database
+            self.semaphore = threading.Semaphore(10)  # semaphore for multiple person access
         else:  # processing
             self.lock = multiprocessing.Lock()
             self.semaphore = multiprocessing.Semaphore(10)
@@ -23,6 +23,7 @@ class Sync:
         self.lock.release()
 
     def get_value(self, key):
+        self.semaphore.acquire()
         self.semaphore.release()
         return self.dict.get(key)
 
