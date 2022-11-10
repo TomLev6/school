@@ -1,6 +1,6 @@
 class Database:
-    def __init__(self, dictionary):
-        self.dict = dictionary
+    def __init__(self):
+        self.dict = {}
         self.set_ready = True
 
     def set_value(self, key, val):
