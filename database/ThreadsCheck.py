@@ -18,11 +18,11 @@ def handle_thread():
         db = Database()
         db.set_value("name", "Tom")
         f = DataFile(db, FILE_NAME)
-        print(db)
+        print(db.dict)
         f.write()
         db.set_value("name2", "roey")
         f.read()
-        print(db)
+        print(db.dict)
     except SystemError as er:
         logging.error(str(er))
 
