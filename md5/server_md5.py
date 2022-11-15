@@ -4,12 +4,13 @@ Tom Lev
 """
 import socket
 import threading
+import logging
 
 IP = '0.0.0.0'
 PORT = 8820
 MAX = 1024
-ENCRYPTED_MSG = "2547978214cc906154503c2c783940b3"  # 1023456789
-LEN = 10
+ENCRYPTED_MSG = '9bf650877990ba63b34e0f0621f754cd'  # "2547978214cc906154503c2c783940b3"  # 1023456789
+LEN = 8
 OPTIONS = 10 ** LEN
 
 threads = []
@@ -49,7 +50,7 @@ def main():
         try:
             while not found:
                 client_socket, client_address = server_socket.accept()
-                print("Client connected")
+                logging.info("Client connected")
                 thread = threading.Thread(target=handle_client, args=(client_socket,))
                 thread.start()
                 threads.append(thread)
@@ -59,7 +60,7 @@ def main():
                 break
             break
         except socket.error as err:
-            print(str(err))
+            logging.error(str(err))
         finally:
             server_socket.close()
             exit()
@@ -82,15 +83,16 @@ def handle_client(client_socket):
                     data = str(client_socket.recv(MAX))
                     data = data.split("'")[1]
                     if data == ENCRYPTED_MSG or data != "0" and data != "ready":
-                        print("the decrypted message: ", data)
+                        logging.debug("the decrypted message: %s" % data)
                         found = True
             client_socket.send("FOUND".encode())
             break
     except socket as er:
-        print(str(er))
+        logging.error(str(er))
     finally:
         client_socket.close()
 
 
 if __name__ == '__main__':
+    logging.basicConfig(filename="md5_server_log.txt", encoding='utf-8', level=logging.DEBUG)
     main()
