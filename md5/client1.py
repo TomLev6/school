@@ -6,10 +6,11 @@ import socket
 import hashlib
 import os
 import threading
+import logging
 
 IP = '127.0.0.1'
 PORT = 8820
-LEN = 10
+LEN = 8
 threads = []
 free_cpus = os.cpu_count()
 total_cpu = os.cpu_count()
@@ -33,7 +34,7 @@ def main():
         while True:
             my_socket.send("ready".encode())
             data = my_socket.recv(1024).decode()
-            print("The server sent " + data)
+            logging.debug("The server sent " + data)
             if "FOUND" not in data:
                 global free_cpus, plus, ends, mid, starts, total_cpu
                 while True:
@@ -48,7 +49,7 @@ def main():
                         free_cpus -= 1
                         thread.start()
                         threads.append(thread)
-                        print(f"starting thread number {total_cpu - free_cpus}..")
+                        logging.debug(f"starting thread number {total_cpu - free_cpus}..")
                         my_socket.send(ANSWER.encode())
                         starts = 0
                         mid = 0
@@ -56,19 +57,19 @@ def main():
                         plus = 1 + starts
                         break
                     if free_cpus == 0:
-                        print("waits for the threads to end..")
+                        logging.debug("waits for the threads to end..")
                         for thread in threads:
                             thread.join()
                         free_cpus = total_cpu
                     break
 
             else:
-                print("found the message!\n disconnecting...")
+                logging.info("found the message!\n disconnecting...")
                 my_socket.close()
                 exit()
     except socket.error as er:
-        print(str(er))
-        print("disconnecting...")
+        logging.error(str(er))
+        logging.info("disconnecting...")
         exit()
     finally:
         my_socket.close()
@@ -87,7 +88,7 @@ def md5(sta, end, msg):
     for i in range(int(sta.split(".")[0]), int(end.split(".")[0])):
         encrypted_msg = hashlib.md5(str(i).zfill(LEN).encode()).hexdigest()
         if encrypted_msg == str(msg):
-            print("FOUND THE MESSAGE!", '[', msg, ']')
+            logging.info("FOUND THE MESSAGE!")
             ANSWER = str(i)
 
 
@@ -112,4 +113,5 @@ def give_range(start, end):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(filename="md5_client_log.txt", encoding='utf-8', level=logging.DEBUG)
     main()
