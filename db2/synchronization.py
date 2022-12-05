@@ -5,6 +5,7 @@ Date: 22/11/22
 import multiprocessing
 # import threading
 import win32event
+import win32process
 
 
 class Sync:
@@ -23,9 +24,10 @@ class Sync:
             self.semaphores = win32event.CreateSemaphore(None, False, 'Thread')
             # self.semaphore = threading.Semaphore(10)  # semaphore for multiple person access
         else:  # processing
-            self.locks = win32event.CreateProcess()
-            self.lock = multiprocessing.Lock()
-            self.semaphore = multiprocessing.Semaphore(10)
+            self.locks = win32process.CreateProcess(None, False, 'Main Process')
+            self.semaphore = win32process.CreateProcess(None, False, 'Process')
+            # self.lock = multiprocessing.Lock()
+            # self.semaphore = multiprocessing.Semaphore(10)
 
     def set_value(self, key, val):
         """
@@ -35,16 +37,28 @@ class Sync:
         :return: res
         """
         # self.lock.acquire()
-        self.locks = win32event.OpenMutex(win32event.SYNCHRONIZE, False, "Main Thread")
-        for i in range(10):
-            self.semaphores = win32event.OpenSemaphore(None, False, 'Thread')
-            # self.semaphore.acquire()
-        res = self.dict.set_value(key, val)
-        for i in range(10):
-            win32event.ReleaseSemaphore(self.semaphores)
-            # self.semaphore.release()
-        win32event.ReleaseMutex(self.locks)
-        # self.lock.release()
+        if self.mode:
+            self.locks = win32event.OpenMutex(win32event.SYNCHRONIZE, False, "Main Thread")
+            for i in range(10):
+                self.semaphores = win32event.OpenSemaphore(None, False, 'Thread')
+                # self.semaphore.acquire()
+            res = self.dict.set_value(key, val)
+            for i in range(10):
+                win32event.ReleaseSemaphore(self.semaphores)
+                # self.semaphore.release()
+            win32event.ReleaseMutex(self.locks)
+            # self.lock.release()
+        else:
+            self.locks = win32process.(win32event.SYNCHRONIZE, False, "Main Thread")
+            for i in range(10):
+                self.semaphores = win32event.OpenSemaphore(None, False, 'Thread')
+                # self.semaphore.acquire()
+            res = self.dict.set_value(key, val)
+            for i in range(10):
+                win32event.ReleaseSemaphore(self.semaphores)
+                # self.semaphore.release()
+            win32event.ReleaseMutex(self.locks)
+            # self.lock.release()
         return res
 
     def get_value(self, key):
