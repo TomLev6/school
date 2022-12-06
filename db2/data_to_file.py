@@ -4,7 +4,7 @@ Date: 22/11/22
 """
 from database import Database
 import os
-from pickle import dump, load
+import win32api
 
 
 class DataFile(Database):
@@ -16,9 +16,12 @@ class DataFile(Database):
         super().__init__()
         self.f = filename
         if not os.path.isfile(self.f):
+            self.f = win32api.GetTempFileName(filename, "")
             file = open(self.f, "wb")
-            dump(self.dict, file)
-            file.close()
+            win32api.UpdateResource(file)
+            # dump(self.dict, file)
+            win32api.CloseHandle(file)
+            # file.close()
 
     def write(self):
         """
@@ -27,9 +30,12 @@ class DataFile(Database):
         :return: None
         """
         if os.path.isfile(self.f):
+
             file = open(self.f, "wb")
-            dump(self.dict, file)
-            file.close()
+            win32api.UpdateResource(file)
+            # dump(self.dict, file)
+            win32api.CloseHandle(file)
+            # file.close()
 
     def read(self):
         """
@@ -38,9 +44,12 @@ class DataFile(Database):
         :return: None
         """
         if os.path.isfile(self.f):
+
             file = open(self.f, "rb")
-            self.dict = load(file)
-            file.close()
+            self.dict = win32api.LoadString(file)
+            # self.dict = load(file)
+            win32api.CloseHandle(file)
+            # file.close()
 
     def set_value(self, key, val):
         """
