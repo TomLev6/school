@@ -15,13 +15,7 @@ class DataFile(Database):
         """
         super().__init__()
         self.f = filename
-        # if not os.path.isfile(self.f):
-        #     self.f = win32file.GetTempFileName(filename, "")
-        #     file = open(self.f, "wb")
-        #     win32file.UpdateResource(file)
-        #     dump(self.dict, file)
-        #     win32file.CloseHandle(file)
-        # file.close()
+   
 
     def write(self):
         """
@@ -33,10 +27,11 @@ class DataFile(Database):
 
             file = win32file.CreateFileW(self.f, win32file.GENERIC_WRITE, 0, None, win32file.CREATE_ALWAYS, 0, None)
             win32file.WriteFile(file, dumps(self.dict))
-            win32file.UpdateResource(file)
-            # dump(self.dict, file)
+            win32file.UpdateResource(file)  
             win32file.CloseHandle(file)
-            # file.close()
+         else:
+            raise Exception('a problem occoured, file not found!')
+               
 
     def read(self):
         """
