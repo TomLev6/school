@@ -45,6 +45,8 @@ class DataFile(Database):
             data = win32file.ReadFile(file, 100000000)
             self.dict = loads(data[1])
             win32file.CloseHandle(file)
+         else:
+            raise Exception('a problem occoured, file not found!')
 
     def set_value(self, key, val):
         """
