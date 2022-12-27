@@ -3,7 +3,8 @@ Author: Tom Lev
 Date: 22/11/22
 """
 import win32event
-
+READ_NAME = 'Main Thread'
+WRITE_NAME = 'Thread'
 
 class Sync:
     def __init__(self, db):
@@ -13,9 +14,9 @@ class Sync:
         """
         super().__init__()
         self.dict = db
-        self.locks = win32event.CreateMutex(None, False, 'Main Thread')
+        self.locks = win32event.CreateMutex(None, False, READ_NAME)
         # lock for only one person can access the database
-        self.semaphores = win32event.CreateSemaphore(None, 1, 1, 'Thread')
+        self.semaphores = win32event.CreateSemaphore(None, 10, 10, WRITE_NAME)
         # semaphore for multiple person accesses
 
     def set_value(self, key, val):
@@ -25,12 +26,11 @@ class Sync:
         :param val: int
         :return: res
         """
-        win32event.WaitForSingleObject(self.locks, False, "Main Thread")
+        win32event.WaitForSingleObject(self.locks, False, READ_NAME)
         for i in range(10):
-            win32event.WaitForSingleObject(self.semaphores, False, 'Thread')
-        res = self.dict.set_value(key, val)
-        for i in range(10):
-            win32event.ReleaseSemaphore(self.semaphores)
+            win32event.WaitForSingleObject(self.semaphores, False, WRITE_NAME)
+        res = self.dict.set_value(key, val)       
+        win32event.ReleaseSemaphore(self.semaphores, 10)
         win32event.ReleaseMutex(self.locks)
 
         return res
@@ -42,7 +42,7 @@ class Sync:
         :return: val, int
         """
         # self.semaphore.acquire()
-        win32event.WaitForSingleObject(self.semaphores, False, 'Thread')
+        win32event.WaitForSingleObject(self.semaphores, False, WRITE_NAME)
         val = self.dict.get_value(key)
         win32event.ReleaseSemaphore(self.semaphores)
         # self.semaphore.release()
@@ -54,11 +54,11 @@ class Sync:
         :param key: int
         :return: val, int
         """
-        # self.lock.acquire()
-        win32event.WaitForSingleObject(self.locks, False, "Main Thread")
-        val = self.get_value(key)
-        self.set_value(key, None)
-        # self.lock.release()
+        win32event.WaitForSingleObject(self.locks, False, READ_NAME)
+        for i in range(10):
+           win32event.WaitForSingleObject(self.semaphores, False, WRITE_NAME) 
+        val = self.dict.pop(key)
+        win32event.ReleaseSemaphore(self.semaphores, 10)      
         win32event.ReleaseMutex(self.locks)
         return val
 
