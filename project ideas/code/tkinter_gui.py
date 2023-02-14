@@ -1,5 +1,6 @@
 import tkinter as tk
-from black_client import Black_client
+
+LARGEFONT = ("Cascadia Code", 25)
 
 
 class FirewallApp:
@@ -7,61 +8,36 @@ class FirewallApp:
         self.root = root
         root.title("Firewall Application")
 
-        self.label = tk.Label(root, text="Welcome to the Firewall Application")
-        self.label.pack()
+        # load the image and resize it
+        self.background_image = tk.PhotoImage(file="C:/Users/cyber/Desktop/pic.png")
+        self.background_image = self.background_image.zoom(2)
 
-        self.ip_label = tk.Label(root, text="Enter IP address:")
-        self.ip_label.pack()
+        # set the background
+        self.background_label = tk.Label(root, image=self.background_image)
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.ip_entry = tk.Entry(root)
-        self.ip_entry.pack()
+        self.label = tk.Label(root, text="Welcome to the Firewall Application", font=LARGEFONT, background="white")
+        self.label.grid(row=1, column=2, padx=30,pady=10)
 
-        # self.port_label = tk.Label(root, text="Enter port number:")
-        # self.port_label.pack()
+        self.block_button = tk.Button(root, text="\n\nBlack List\n\n", command=self.block, width=30)
+        self.block_button.grid(column=1, row=143, padx=10, pady=400)
 
-        # self.port_entry = tk.Entry(root)
-        # self.port_entry.pack()
+        self.unblock_button = tk.Button(root, text="\n\nSettings\n\n", command=self.unblock, width=30)
+        self.unblock_button.grid(column=2, row=143, padx=10, pady=400)
 
-        self.block_button = tk.Button(root, text="Block", command=self.block)
-        self.block_button.pack()
-
-        self.unblock_button = tk.Button(root, text="Unblock", command=self.unblock)
-        self.unblock_button.pack()
-
-        self.list_blocked_ips_button = tk.Button(root, text="List blocked IP addresses", command=self.list_blocked_ips)
-        self.list_blocked_ips_button.pack()
-
-        self.listbox = tk.Listbox(root)
-        self.listbox.pack()
+        self.block_button = tk.Button(root, text="\n\nWhite List\n\n", command=self.block, width=30)
+        self.block_button.grid(column=3, row=143, padx=0, pady=400)
 
     def block(self):
-        ip = self.ip_entry.get()
-
-        if not ip:
-            self.label.config(text="Please enter both an IP address and a port number.")
-            return
-
-        # Call the code to block an IP address and port here
-        self.label.config(text=f"IP address {ip} blocked.")
+        pass
 
     def unblock(self):
-        ip = self.ip_entry.get()
-        if not ip:
-            self.label.config(text="Please enter both an IP address and a port number.")
-            return
-
-        # Call the code to unblock an IP address and port here
-        self.label.config(text=f"IP address {ip} unblocked.")
-
-    def list_blocked_ips(self, black_list: Black_client):
-        # Call the code to retrieve a list of blocked IP addresses and ports here
-        blocked_ips = black_list.get_all_ips()
-
-        for ip in blocked_ips:
-            self.listbox.insert(tk.END, ip)
+        pass
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = FirewallApp(root)
+    root.minsize(1200, 700)
+    root.maxsize(1200, 700)
     root.mainloop()
