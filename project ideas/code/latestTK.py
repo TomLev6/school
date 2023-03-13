@@ -26,11 +26,13 @@ class FirewallApp:
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
         self.label = tk.Label(self.menu_frame, text="Welcome to the Firewall Application", font=LARGEFONT)
-        self.block_button = tk.Button(self.menu_frame, text="\n\nBlack List\n\n", command=self.show_blacklist, width=30)
-        self.unblock_button = tk.Button(self.menu_frame, text="\n\nSettings\n\n", command=self.show_settings, width=30)
+        self.blackl_button = tk.Button(self.menu_frame, text="\n\nBlack List\n\n", command=self.show_blacklist, width=30)
+        self.setin_button = tk.Button(self.menu_frame, text="\n\nSettings\n\n", command=self.show_settings, width=30)
         # self.white_list_button = tk.Button(self.menu_frame, text="\n\nWhite List\n\n", command=self.show_whitelist, width=30)
 
         self.blocked_users = tk.Listbox(container, font=('Cascadia Code', 15))
+        # self.white_users = tk.Listbox(container, font=('Cascadia Code', 15))
+
         self.settings_frame = tk.Frame(container)
         self.settings_frame.grid(row=0, column=0, sticky="nwes")
         self.settings_label = tk.Label(self.settings_frame, text="Settings:", font=LARGEFONT)
@@ -44,8 +46,8 @@ class FirewallApp:
     def show_menu(self):
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
         self.label.grid(row=1, column=2)
-        self.block_button.grid(column=1, row=2, pady=10)
-        self.unblock_button.grid(column=2, row=2, pady=10)
+        self.blackl_button.grid(column=1, row=2, pady=10)
+        self.setin_button.grid(column=2, row=2, pady=10)
         # self.white_list_button.grid(column=3, row=2, pady=10)
         self.menu_frame.tkraise()
 
@@ -58,14 +60,29 @@ class FirewallApp:
         self.background_label.place_forget()
         self.blocked_users.grid(row=0, column=0, sticky="nwes")
         self.back_button_bl = tk.Button(self.blocked_users, text="Back to Menu", command=self.show_menu, width=30)
-        self.back_button_bl.grid(column=0, row=1, padx=10, pady=10, sticky="e")
+        self.back_button_bl.pack() # grid(column=0, row=10, padx=10, pady=10, sticky="e")
         self.blocked_users.tkraise()
+        self.back_button_bl.destroy()
+
+
+
+    # def show_whitelist(self):
+    #     self.white_users.delete(0, tk.END)
+    #     with open("whitelist.txt") as f:
+    #         for line in f:
+    #             self.white_users.insert(tk.END, line.strip())
+    #
+    #     self.background_label.place_forget()
+    #     self.blocked_users.grid(row=0, column=0, sticky="nwes")
+    #     self.back_button_wl = tk.Button(self.white_users, text="Back to Menu", command=self.show_menu, width=30)
+    #     self.back_button_wl.pack()  # grid(column=0, row=10, padx=10, pady=10, sticky="e")
+    #     self.white_users.tkraise()
 
     def show_settings(self):
         # hide the current frame
         self.label.grid_forget()
-        self.block_button.grid_forget()
-        self.unblock_button.grid_forget()
+        self.blackl_button.grid_forget()
+        self.setin_button.grid_forget()
         # self.white_list_button.grid_forget()
         # show the settings frame
         self.settings_label.pack()
