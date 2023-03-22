@@ -1,6 +1,4 @@
 from scapy.layers.inet import IP, TCP
-from client import Clients
-from black_client import Black_client
 from scapy.all import *
 from scapy.packet import Packet
 from datetime import datetime
@@ -12,7 +10,6 @@ start_time = time.time()
 # users_list = Clients()
 # black_list = Black_client()
 db = Odbc()
-db.connect()
 
 
 def handle_packets(packet: Packet):
@@ -23,47 +20,52 @@ def handle_packets(packet: Packet):
             db.insert_new_user(ip, 1, str(time.time()))
         else:
             db.update_user_data(ip, db.get_user_packets(ip) + 1)
-            if db.get_user_packets(ip) > 128:
-                elapsed_time = time.time() - db.get_user_time(ip)
-                # print(f"if {users_list.get_packets_count(ip)} > {max_packets} and {elapsed_time} < 2")
-                if db.get_user_packets(ip) > max_packets and elapsed_time < 3:  # 1
-                    print("******************************  Attack detected!  ******************************")
-                    now = datetime.now()
-                    db.insert_to_blacklist(ip, "attacker", now)
-            else:
-                if str(packet[TCP].flags) == "S":
-                    print("routing the request to the site...")
-                # print(users_list)
-                # if len(black_list) > 0:
-                #     print(black_list)
+        #     if db.get_user_packets(ip) > 128:
+        #         elapsed_time = float(time.time()) - float(db.get_user_time(ip))
+        #         # print(f"if {users_list.get_packets_count(ip)} > {max_packets} and {elapsed_time} < 2")
+        #         if db.get_user_packets(ip) > max_packets and elapsed_time < 3:  # 1
+        #             print("******************************  Attack detected!  ******************************")
+        #             now = datetime.now()
+        #             db.insert_to_blacklist(ip, "attacker", now)
+        print("routing the request to the site...")
+
     else:
         print("Error!")
         pass
 
 
 def like_hash(packt: Packet):
+    global db
     if IP and TCP in packt.layers():
         if str(packt[TCP].flags) == "A":
-            x = int(packt[TCP].seq)
-            y = 640 / x + int(packt[TCP].sport) + int(packt[IP].src.split(".")[-1])
-            if y + 1 == int(packt[TCP].ack):
-                return True
-    return False
+            if int(packt[TCP].seq) != 0 or \
+                    int(packt[TCP].sport) * int(packt[IP].src.split(".")[-1]) + 1 != int(packt[TCP].ack):
+                print("******************************  Attack detected!  ******************************")
+                now = datetime.now()
+                db.insert_to_blacklist(packt[IP].src, "attacker", now)
+        elif str(packt[TCP].flags) == "S":
+            ip = IP(dst=packt[IP].src)
+            tcp = TCP(seq=int(int(packt[TCP].sport) * int(packt[IP].src.split(".")[-1])))
+            p = ip / tcp
+            send(p, inter=.0001)
+    return True
 
 
 def filters(pkt: Packet):
     global db
     if IP in pkt.layers():
+        # if str(pkt[IP].src) == "192.168.1.32" and str(pkt[IP].dst) == "192.168.1.5":
         if db.find_in_blacklist(pkt[IP].src):
             print(f"access denied!, blocked user({pkt[IP].src})!")
             return False
-        elif like_hash(pkt):
-            return True
-        return False
+        else:
+            return like_hash(pkt)
 
 
 def main():
-    sniff(prn=handle_packets, lfilter=filters)
+    db.connect()
+    while True:
+        sniff(prn=handle_packets, lfilter=filters)
 
 
 if __name__ == '__main__':
