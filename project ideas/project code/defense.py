@@ -5,8 +5,11 @@ from scapy.all import *
 from scapy.packet import Packet
 from datetime import datetime
 from sql_db import Odbc
+
 db = Odbc()
 queue = multiprocessing.Queue(maxsize=2_000)
+received_packets = 0
+
 
 # TODO: TALKING CARE OF A FLOOD OF SYN REQUESTS, GUI.
 
@@ -29,7 +32,7 @@ def filters(pkt: Packet):
                 return True
                 # return custom_three_way_handshake(pkt)
             else:
-                print(f"access denied!, blocked user({pkt[IP].src})!")  ###########
+                print(f"access denied!, blocked user({pkt[IP].src})!")
     return False
 
 
@@ -56,7 +59,7 @@ def handle_packets():
             send(p_sa, verbose=0)
             print("sent: [SA]")
             tm = datetime.now()
-            a_pkt = queue.get()  #הוצאה
+            a_pkt = queue.get()  # הוצאה
             while not costume_filter(a_pkt, str(pkt[TCP].sport), pkt[IP].src) and (datetime.now() - tm).seconds < 2:
                 if (datetime.now() - datetime.utcfromtimestamp(a_pkt.time)).seconds < 60:
                     queue.put(a_pkt)  # החזרה לסוף התור
@@ -87,6 +90,15 @@ def handle_packets():
             queue.put(pkt)
 
 
+def db_check():
+    pass
+
+
+def rate_limit_check():
+    # received_packets += 1
+    pass
+
+
 def main():
     # sniff in the background
     t = threading.Thread(target=sniffs)
@@ -97,4 +109,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    

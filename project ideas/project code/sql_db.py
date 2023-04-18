@@ -56,6 +56,13 @@ class Odbc:
         self.conn.commit()
         ###########print("Commit changes..")
 
+    @connect_and_close
+    def insert_to_whitelist(self, ip: str, mode: str, starttime: datetime):
+        self.cursor.execute("INSERT INTO Whitelist (userIP, mode, StartDate) VALUES (?, ?, ?)",
+                            (ip, mode, starttime))
+        # Commit changes
+        self.conn.commit()
+
     def __close_connection(self):
         # Close connection
         self.conn.close()
@@ -75,6 +82,16 @@ class Odbc:
     def find_in_blacklist(self, ip: str):
         ###########print(ip, "[SEARCHING-Blacklist]")
         self.cursor.execute(f"SELECT * FROM BlackList WHERE userIp ='{ip}';")
+        result = self.cursor.fetchall()
+        if len(result) > 0:
+            ###########print("user already in the Blacklist!")
+            return True
+        return False
+
+    @connect_and_close
+    def find_in_whitelist(self, ip: str):
+        ###########print(ip, "[SEARCHING-Blacklist]")
+        self.cursor.execute(f"SELECT * FROM WhiteList WHERE userIp ='{ip}';")
         result = self.cursor.fetchall()
         if len(result) > 0:
             ###########print("user already in the Blacklist!")

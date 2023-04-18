@@ -51,32 +51,37 @@ def sr1_ignore_rst_second(p: Packet, inter=.0001, verbose=False) -> Union[Packet
     return None
 
 
-while True:
-    IP1 = IP(dst=target_IP)
-    TCP1 = TCP(dport=8000, sport=28588, flags="S", seq=random.randint(9999, 89898))
-    syn_pkt = IP1 / TCP1
-    sa_pack = sr1_ignore_rst(syn_pkt)
+def main():
+    while True:
+        IP1 = IP(dst=target_IP)
+        TCP1 = TCP(dport=8000, sport=28588, flags="S", seq=random.randint(9999, 89898))
+        syn_pkt = IP1 / TCP1
+        sa_pack = sr1_ignore_rst(syn_pkt)
 
-    if sa_pack is not None:
-        print(int(sa_pack[TCP].seq) + 1)
-        ack_pkt = IP(dst=target_IP) / TCP(dport=syn_pkt[TCP].dport,
-                                          sport=syn_pkt[TCP].sport, flags="A", ack=int(sa_pack[TCP].seq) + 1)
-        print("sending...")
-        last_ans = sr1(ack_pkt, verbose=0, timeout=1)
-        print("sent.")
+        if sa_pack is not None:
+            print(int(sa_pack[TCP].seq) + 1)
+            ack_pkt = IP(dst=target_IP) / TCP(dport=syn_pkt[TCP].dport,
+                                              sport=syn_pkt[TCP].sport, flags="A", ack=int(sa_pack[TCP].seq) + 1)
+            print("sending...")
+            last_ans = sr1(ack_pkt, verbose=0, timeout=1)
+            print("sent.")
 
-        if last_ans is not None:
+            if last_ans is not None:
 
-            p2 = sniff(count=1, lfilter=filters, timeout=1)
+                p2 = sniff(count=1, lfilter=filters, timeout=1)
 
-            if Raw in last_ans.layers() and last_ans is not None and TCP in \
-                    last_ans.layers() and last_ans[TCP].flags not in ["RA", "R"]:
-                print(p2[Raw].load.decode())
-            elif p2:
-                p2 = p2[0]
-                if Raw in p2.layers():
+                if Raw in last_ans.layers() and last_ans is not None and TCP in \
+                        last_ans.layers() and last_ans[TCP].flags not in ["RA", "R"]:
                     print(p2[Raw].load.decode())
+                elif p2:
+                    p2 = p2[0]
+                    if Raw in p2.layers():
+                        print(p2[Raw].load.decode())
 
-        else:
-            print("None")
-            exit()
+            else:
+                print("None")
+                exit()
+
+
+if __name__ == '__main__':
+    main()
