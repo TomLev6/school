@@ -40,26 +40,40 @@ class Odbc:
         self.cursor = self.conn.cursor()
 
     @connect_and_close
-    def insert_new_user(self, ip: str, packets: int, time: str):
+    def insert_new_user(self, ip: str, starttime: datetime):
         # Insert data into the table
-        self.cursor.execute("INSERT INTO Users (userIP, PacketsAmount, StartTime) VALUES (?, ?, ?)",
-                            (ip, packets, time))
+        self.cursor.execute("INSERT INTO Users (userIP, startdate) VALUES (?, ?)",
+                            (ip, starttime))
         # Commit changes
         self.conn.commit()
         ###########print("Commit changes.. ,inserting", (ip, packets, time))
 
     @connect_and_close
-    def insert_to_blacklist(self, ip: str, mode: str, starttime: datetime):
-        self.cursor.execute("INSERT INTO BlackList (userIP, mode, StartDate) VALUES (?, ?, ?)",
-                            (ip, mode, starttime))
+    def insert_to_blacklist(self, ip: str, starttime: datetime):
+        self.cursor.execute("INSERT INTO BlackList (userIP, startdate) VALUES (?, ?)",
+                            (ip, starttime))
         # Commit changes
         self.conn.commit()
         ###########print("Commit changes..")
 
     @connect_and_close
-    def insert_to_whitelist(self, ip: str, mode: str, starttime: datetime):
-        self.cursor.execute("INSERT INTO Whitelist (userIP, mode, StartDate) VALUES (?, ?, ?)",
-                            (ip, mode, starttime))
+    def insert_to_whitelist(self, ip: str, starttime: datetime):
+        self.cursor.execute("INSERT INTO Whitelist (userIP, startdate) VALUES (?, ?)",
+                            (ip, starttime))
+        # Commit changes
+        self.conn.commit()
+
+    @connect_and_close
+    def insert_to_AllRequests(self, ip: str, starttime: datetime):
+        self.cursor.execute("INSERT INTO AllRequests (userIP, startdate) VALUES (?, ?)",
+                            (ip, starttime))
+        # Commit changes
+        self.conn.commit()
+
+    @connect_and_close
+    def insert_to_ServerRequests(self, ip: str, starttime: datetime):
+        self.cursor.execute("INSERT INTO ServerRequests (userIP, startdate) VALUES (?, ?)",
+                            (ip, starttime))
         # Commit changes
         self.conn.commit()
 
@@ -99,26 +113,49 @@ class Odbc:
         return False
 
     @connect_and_close
-    def update_user_data(self, ip: str, packets: int):
-        self.cursor.execute("UPDATE Users SET userIP = ?, PacketsAmount = ?",
-                            (ip, packets))
+    def users_check(self):
+        self.cursor.execute(f"SELECT userIp FROM Users;")
+        users_list = self.cursor.fetchall()
+        self.cursor.execute(f"SELECT userIp FROM WhiteList;")
+        Whitelist_users = self.cursor.fetchall()
+        for user in users_list:
+            if user not in Whitelist_users:
+                self.insert_to_blacklist(user)
+            self.cursor.execute(f"DELETE {user} From Users;")
         self.conn.commit()
 
     @connect_and_close
-    def get_user_packets(self, ip: str):
-        self.cursor.execute(f"SELECT * FROM Users WHERE userIp ='{ip}';")
-        result = self.cursor.fetchall()
-        if len(result) > 0:
-            res = str(result[0])
-            return int(res.split(",")[1])
-        else:
-            return 0
+    def total_request_count(self):
+        self.cursor.execute(f"SELECT userIp FROM AllRequests;")
+        requests_list = self.cursor.fetchall()
+        return len(requests_list)
 
     @connect_and_close
-    def get_user_time(self, ip: str):
-        self.cursor.execute(f"SELECT * FROM Users WHERE userIp ='{ip}';")
-        res = str(self.cursor.fetchall()).split(",")[2]
-        return res.split("'")[1]
+    def server_request_count(self):
+        self.cursor.execute(f"SELECT userIp FROM ServerRequests;")
+        requests_list = self.cursor.fetchall()
+        return len(requests_list)
+    # @connect_and_close
+    # def update_user_data(self, ip: str, packets: int):
+    #     self.cursor.execute("UPDATE Users SET userIP = ?, PacketsAmount = ?",
+    #                         (ip, packets))
+    #     self.conn.commit()
+
+    # @connect_and_close
+    # def get_user_packets(self, ip: str):
+    #     self.cursor.execute(f"SELECT * FROM Users WHERE userIp ='{ip}';")
+    #     result = self.cursor.fetchall()
+    #     if len(result) > 0:
+    #         res = str(result[0])
+    #         return int(res.split(",")[1])
+    #     else:
+    #         return 0
+    #
+    # @connect_and_close
+    # def get_user_time(self, ip: str):
+    #     self.cursor.execute(f"SELECT * FROM Users WHERE userIp ='{ip}';")
+    #     res = str(self.cursor.fetchall()).split(",")[2]
+    #     return res.split("'")[1]
 
     @connect_and_close
     def delete_user(self, ip: str, db: str):
@@ -132,13 +169,11 @@ class Odbc:
         # Commit changes
         self.conn.commit()
 
-
-
-o = Odbc()
-o.clear_db('Users')
-o.clear_db('Blacklist')
-# o.close_connection()
-# o.insert_new_user("100.111.111.111", 55, str(datetime.now()))
+#
+# o = Odbc()
+# o.insert_new_user("100.111.111.111", datetime.now())
+#
+# o.users_check()
 # o.update_user_data("100.111.111.111", 90)
 #print(o.get_user_time("100.111.111.111"))
 # o.find_in_users("100.111.111.111")  # , 55, str(datetime.now())
