@@ -102,6 +102,8 @@ class Tk:
                                          selectmode="browse", width=17, yscrollcommand=True)
 
         # buttons
+        self.refresh_log_btn = tk.Button(master=self.window, text="Refresh", width=10, height=2,
+                                      font=self.largefont, command=self.update_log)
         self.log_data_btn = tk.Button(master=self.window, text="Logging Data", width=14, height=2,
                                       font=self.largefont, command=self.log_command)
 
@@ -157,15 +159,18 @@ class Tk:
                                                font=self.largefont)
         self.menu_screen()
 
-    def update_log(self):
+     def update_log(self):
         """
         updates the log data, converts the file data into text.
         :return: nothing
         """
+        if self.log_text is not None:
+            self.log_text.place_forget()
         self.log_text = tk.Text(self.window)
         with open("defense.log", "r") as f:
             log_contents = f.read()
         self.log_text.insert(tk.END, log_contents)
+        self.log_text.place(x=300, y=140)
 
     def update_pc_listbox(self):
         """
@@ -399,7 +404,7 @@ class Tk:
                 "Server IP Notifications!", "The entered ip is not valid, please enter a valid one."),
                              daemon=True).start()
 
-    def log_command(self):
+  def log_command(self):
         """
         the log command: that forgets all the menu frame widgets, and creates its own.
         :return: nothing
@@ -412,8 +417,7 @@ class Tk:
 
         # create new
         self.back_to_menu_log_btn.pack(side="left")
-        self.update_log()
-        self.log_text.place(x=300, y=140)
+        self.refresh_log_btn.pack(side="right")
 
     def menu_screen(self):
         """
@@ -632,12 +636,13 @@ class Tk:
         self.back_to_menu_all_packets_btn.pack_forget()
         self.menu_screen()
 
-    def back_btn_from_log(self):
+ def back_btn_from_log(self):
         """
         the back button to the menu frame from the logging frame.
         :return: nothing
         """
         # forget all
+        self.refresh_log_btn.pack_forget()
         self.log_text.place_forget()
         self.back_to_menu_log_btn.pack_forget()
         self.menu_screen()
