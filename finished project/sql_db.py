@@ -191,6 +191,18 @@ class Odbc:
         conn.commit()
         cursor.close()
         conn.close()
+    
+    def whitelist_request_count(self):
+        """
+        gets all the users ip (userIP) from the WhiteList table.
+        :return: list[Row]
+        """
+        conn, cursor = self.__connect()
+        cursor.execute(f"SELECT userIP FROM WhiteList;")
+        requests_list = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return requests_list
 
     def total_request_count(self):
         """
