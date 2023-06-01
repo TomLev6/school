@@ -95,7 +95,7 @@ def handle_packets(server_ip):
         # only send things, to 'receive' use queue.get()
         if str(pkt[TCP].flags) == "S":
             logging.info("server received [S]")
-            new_seq = (int(pkt[TCP].sport) * int(pkt[IP].src.split(".")[-1]))  # y
+            new_seq = (int(pkt[TCP].sport) * int(pkt[IP].src.split(".")[-1])) + int(a_pkt[TCP].seq)   # y
             ip = IP(src=pkt[IP].dst, dst=pkt[IP].src)
             tcp = TCP(dport=pkt[TCP].sport, sport=pkt[TCP].dport, flags='SA', seq=new_seq, ack=pkt[TCP].seq + 1)
             p_sa = ip / tcp
@@ -110,7 +110,7 @@ def handle_packets(server_ip):
             logging.info("server received [A]")
             ip = a_pkt[IP].src
             if int(a_pkt[TCP].seq) != 0 or \
-                    int(a_pkt[TCP].sport) * int(a_pkt[IP].src.split(".")[-1]) + 1 == int(a_pkt[TCP].ack):
+                    int(a_pkt[TCP].sport) * int(a_pkt[IP].src.split(".")[-1]) + int(a_pkt[TCP].seq) + 1 == int(a_pkt[TCP].ack):
                 if not db.find_in_whitelist(ip):
                     db.insert_to_whitelist(ip, datetime.now())
 
