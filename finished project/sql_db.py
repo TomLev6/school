@@ -354,7 +354,3 @@ class Odbc:
         conn.commit()
         cursor.close()
         conn.close()
-
-
-o = Odbc()
-o.clear_db("WhiteList")
