@@ -218,7 +218,7 @@ def sum_whitelist_requests(max_server_packets):
         ip = ip.split("(")[-1]
         ip = ip.split("'")[1]
         packets = int(db.get_packets_amount(ip, W))
-        if packets > int(max_pc_packets) / 10:  # if the user sends over max_packets / 10 packets to the
+        if packets > int(max_server_packets) / 10:  # if the user sends over max_packets / 10 packets to the
             # server in under 30 seconds he gets blocked
 
             if not db.find_in_blacklist(ip):
