@@ -123,11 +123,11 @@ def handle_packets(server_ip):
 
 def db_check():
     """
-    Passes every five seconds for all the users in users if they are on the whitelist to delete them, if not move
+    Passes every 120 seconds for all the users in users if they are on the whitelist to delete them, if not move
     them to the blacklist.
     :return: nothing
     """
-    threading.Timer(5.0, db_check).start()
+    threading.Timer(120.0, db_check).start()
     logging.info("[USER CHECK...]")
     db.users_check()
 
