@@ -22,7 +22,7 @@ queue = multiprocessing.Queue(maxsize=2_000)
 B = "Blacklist"
 S = "ServerRequests"
 A = "AllRequests"
-
+W = "Whitelist"
 
 def sniffs(port, ip):
     """
@@ -143,6 +143,8 @@ def rate_limit_check(max_pc_packets, max_server_packets):
     logging.info("[RATE LIMIT CHECK...]")
     # logging.info("TOTAL REQUESTS TO THE COMPUTER:", sum_all_requests(max_pc_packets))
     # logging.info("TOTAL REQUESTS TO THE SERVER:", sum_server_requests(max_server_packets))
+    if sum_whitelist_requests(max_server_packets) > int(max_server_packets):
+        logging.info("SERVER UNDER ATTACK!!!")
     if sum_all_requests(max_pc_packets) > int(max_pc_packets):
         logging.info("PC UNDER ATTACK!!!")
     if sum_server_requests(max_server_packets) > int(max_server_packets):
@@ -201,6 +203,33 @@ def sum_server_requests(max_server_packets):
 
         counter += int(db.get_packets_amount(ip, S))
     db.clear_db(S)
+    return counter
+
+def sum_whitelist_requests(max_server_packets):
+    """
+    blocks the user if he sent too many packets and returns the amount of the packets from all the users, in the end
+    clears the table in order to analyze the amount of packets only during the defined time.
+    :return: int
+    """
+    whitelist_users = db.whitelist_request_count()
+    counter = 0
+    for user in whitelist_users:
+        ip = str(user).split(",")[0]
+        ip = ip.split("(")[-1]
+        ip = ip.split("'")[1]
+        packets = int(db.get_packets_amount(ip, W))
+        if packets > int(max_pc_packets) / 10:  # if the user sends over max_packets / 10 packets to the
+            # server in under 30 seconds he gets blocked
+
+            if not db.find_in_blacklist(ip):
+                db.insert_to_blacklist(ip, datetime.now())
+                logging.info(f"[BLOCKING USER - {ip}]")
+                threading.Thread(target=messagebox.showwarning,
+                                 args=("Whitelist Packets Rate Notifications!", f"PC max packets rate has reached by {ip}!"),
+                                 daemon=True).start()
+
+        counter += int(db.get_packets_amount(ip, W))
+    db.clear_db(W)
     return counter
 
 
