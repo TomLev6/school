@@ -192,6 +192,8 @@ class Tk:
         update the server listbox.
         :return: nothing
         """
+        self.server_ips_listbox = tk.Listbox(self.window, font=self.largefont, fg="green", height=7,
+                                             selectmode="browse", width=17)
         i = 1
         for user_ip in self.db.get_all_users(self.S):
             user_ip = str(user_ip).replace(")", "")
@@ -206,7 +208,8 @@ class Tk:
         update the blacklist listbox.
         :return: nothing
         """
-        self.blacklist_ips_listbox.delete('0', "end")
+        self.blacklist_ips_listbox = tk.Listbox(self.window, font=self.largefont, fg="green", height=7,
+                                                selectmode="browse", width=17)
         i = 1
         for user_ip in self.db.get_all_users(self.B):
             user_ip = str(user_ip).replace(")", "")
@@ -221,7 +224,8 @@ class Tk:
         update the whitelist listbox.
         :return: nothing
         """
-        self.whitelist_ips_listbox.delete('0', "end")
+        self.whitelist_ips_listbox = tk.Listbox(self.window, font=self.largefont, fg="green", height=7,
+                                                selectmode="browse", width=17)
         i = 1
         for user_ip in self.db.get_all_users(self.W):
             user_ip = str(user_ip).replace(")", "")
