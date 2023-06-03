@@ -23,8 +23,7 @@ class Tk:
         self.main_function = main_function
         self.unblocking_function = unblocking_function
         self.window.title("Firewall Application")
-        self.background_image = tk.PhotoImage(file="C:\\Users\\cyber\\PycharmProjects\\synflood"
-                                                   "\\backgr.png")
+        self.background_image = tk.PhotoImage(file="backgr.png")
         self.db = db
         self.largefont = ("Cascadia Code", 25)
         self.is_on = False
@@ -192,8 +191,7 @@ class Tk:
         update the server listbox.
         :return: nothing
         """
-        self.server_ips_listbox = tk.Listbox(self.window, font=self.largefont, fg="green", height=7,
-                                             selectmode="browse", width=17)
+        self.server_ips_listbox.delete(0, "end")
         i = 1
         for user_ip in self.db.get_all_users(self.S):
             user_ip = str(user_ip).replace(")", "")
@@ -208,8 +206,7 @@ class Tk:
         update the blacklist listbox.
         :return: nothing
         """
-        self.blacklist_ips_listbox = tk.Listbox(self.window, font=self.largefont, fg="green", height=7,
-                                                selectmode="browse", width=17)
+        self.blacklist_ips_listbox.delete(0, "end")
         i = 1
         for user_ip in self.db.get_all_users(self.B):
             user_ip = str(user_ip).replace(")", "")
@@ -224,8 +221,7 @@ class Tk:
         update the whitelist listbox.
         :return: nothing
         """
-        self.whitelist_ips_listbox = tk.Listbox(self.window, font=self.largefont, fg="green", height=7,
-                                                selectmode="browse", width=17)
+        self.whitelist_ips_listbox.delete(0, "end")
         i = 1
         for user_ip in self.db.get_all_users(self.W):
             user_ip = str(user_ip).replace(")", "")
