@@ -3,7 +3,6 @@ Author: Tom Lev
 Date: 11/05/23
 """
 from tkinter import messagebox
-
 from user_gui import Tk
 import tkinter as tk
 import multiprocessing
@@ -23,6 +22,7 @@ B = "Blacklist"
 S = "ServerRequests"
 A = "AllRequests"
 W = "Whitelist"
+
 
 def sniffs(port, ip):
     """
@@ -85,7 +85,8 @@ def handle_packets(server_ip):
     """
     while True:
         pkt = queue.get()
-        db.insert_new_user(pkt[IP].src, datetime.now())
+        if not db.find_in_users(pkt[IP].src):
+            db.insert_new_user(pkt[IP].src, datetime.now())
         if db.find_in_whitelist(pkt[IP].src):
             msg_pack = IP(dst=pkt[IP].src) / TCP(dport=pkt[TCP].sport, sport=pkt[TCP].dport) / Raw(
                 load="You are not an attacker!, phew..")
@@ -95,7 +96,7 @@ def handle_packets(server_ip):
         # only send things, to 'receive' use queue.get()
         if str(pkt[TCP].flags) == "S":
             logging.info("server received [S]")
-            new_seq = (int(pkt[TCP].sport) * int(pkt[IP].src.split(".")[-1])) + int(a_pkt[TCP].seq)   # y
+            new_seq = (int(pkt[TCP].sport) * int(pkt[IP].src.split(".")[-1])) + int(pkt[TCP].seq)   # y
             ip = IP(src=pkt[IP].dst, dst=pkt[IP].src)
             tcp = TCP(dport=pkt[TCP].sport, sport=pkt[TCP].dport, flags='SA', seq=new_seq, ack=pkt[TCP].seq + 1)
             p_sa = ip / tcp
@@ -103,20 +104,23 @@ def handle_packets(server_ip):
             logging.info("server sent: [SA]")
             tm = datetime.now()
             a_pkt = queue.get()  # הוצאה
-            while not costume_filter(a_pkt, str(pkt[TCP].sport), pkt[IP].src, server_ip) and (datetime.now() - tm).seconds < 2:
+            while not costume_filter(a_pkt, str(pkt[TCP].sport), pkt[IP].src, server_ip) and\
+                    (datetime.now() - tm).seconds < 2:
                 if (datetime.now() - datetime.utcfromtimestamp(a_pkt.time)).seconds < 60:
                     queue.put(a_pkt)  # החזרה לסוף התור
                 a_pkt = queue.get()
             logging.info("server received [A]")
             ip = a_pkt[IP].src
             if int(a_pkt[TCP].seq) != 0 or \
-                    int(a_pkt[TCP].sport) * int(a_pkt[IP].src.split(".")[-1]) + int(a_pkt[TCP].seq) + 1 == int(a_pkt[TCP].ack):
+                    (int(a_pkt[TCP].sport) * int(a_pkt[IP].src.split(".")[-1])) + int(a_pkt[TCP].seq) + 1 ==\
+                    int(a_pkt[TCP].ack):
                 if not db.find_in_whitelist(ip):
-                    db.insert_to_whitelist(ip, datetime.now())
+                    logging.info(f"user {a_pkt[IP].src} added to the WhiteList!")
+                    db.insert_to_whitelist(ip, datetime.now(), 1)
 
-                msg_pack = IP(dst=a_pkt[IP].src) / TCP(dport=a_pkt[TCP].sport, sport=a_pkt[TCP].dport) / Raw(
-                    load="You are not an attacker!, phew..")
-                send(msg_pack, inter=.001, verbose=0)
+                    msg_pack = IP(dst=a_pkt[IP].src) / TCP(dport=a_pkt[TCP].sport, sport=a_pkt[TCP].dport) / Raw(
+                        load="You are not an attacker!, phew..")
+                    send(msg_pack, inter=.001, verbose=0)
         else:
             queue.put(pkt)
 
@@ -127,7 +131,7 @@ def db_check():
     them to the blacklist.
     :return: nothing
     """
-    threading.Timer(120.0, db_check).start()
+    threading.Timer(10.0, db_check).start()
     logging.info("[USER CHECK...]")
     db.users_check()
 
@@ -194,16 +198,20 @@ def sum_server_requests(max_server_packets):
         packets = int(db.get_packets_amount(ip, S))
         if packets > int(max_server_packets) / 10:  # if the user sends over max_server_packets / 10 packets to the
             # server in under 30 seconds he gets blocked
+            if db.find_in_whitelist(ip):
+                db.delete_user(ip, W)
             if not db.find_in_blacklist(ip):
                 db.insert_to_blacklist(ip, datetime.now())
                 logging.info(f"[BLOCKING USER - {ip}]")
                 threading.Thread(target=messagebox.showwarning,
-                                 args=("Server Packets Rate Notifications!", f"Server max packets rate has reached by {ip}!"),
+                                 args=("Server Packets Rate Notifications!", f"Server max packets rate has reached by"
+                                                                             f" {ip}!"),
                                  daemon=True).start()
 
         counter += int(db.get_packets_amount(ip, S))
     db.clear_db(S)
     return counter
+
 
 def sum_whitelist_requests(max_server_packets):
     """
@@ -220,16 +228,17 @@ def sum_whitelist_requests(max_server_packets):
         packets = int(db.get_packets_amount(ip, W))
         if packets > int(max_server_packets) / 10:  # if the user sends over max_packets / 10 packets to the
             # server in under 30 seconds he gets blocked
-
+            db.delete_user(ip, W)
             if not db.find_in_blacklist(ip):
                 db.insert_to_blacklist(ip, datetime.now())
+
                 logging.info(f"[BLOCKING USER - {ip}]")
                 threading.Thread(target=messagebox.showwarning,
-                                 args=("Whitelist Packets Rate Notifications!", f"PC max packets rate has reached by {ip}!"),
+                                 args=("Whitelist Packets Rate Notifications!", f"PC max packets rate has reached by"
+                                                                                f" {ip}!"),
                                  daemon=True).start()
 
         counter += int(db.get_packets_amount(ip, W))
-    db.clear_db(W)
     return counter
 
 
@@ -248,7 +257,8 @@ def main(port, server_ip, max_pc_packets, max_server_packets):
     the main function which starts all the threads.
     :return: nothing
     """
-    logging.info(f"PORT:{port} , SERVER IP:{server_ip}, MAX PACKETS PC:{max_pc_packets}, MAX PACKETS SERVER:{max_server_packets}")
+    logging.info(f"PORT:{port} , SERVER IP:{server_ip}, MAX PACKETS PC:{max_pc_packets}, "
+                 f"MAX PACKETS SERVER:{max_server_packets}")
     # sniff in the background
     t = threading.Thread(target=sniffs, args=(port, server_ip))
     t.start()
