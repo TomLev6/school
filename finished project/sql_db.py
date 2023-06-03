@@ -34,7 +34,7 @@ class Odbc:
         # Create a cursor
         return conn, conn.cursor()
 
-    def insert_new_user(self, ip: str, starttime: datetime):
+  def insert_new_user(self, ip: str, starttime: datetime):
         """
         inserts the received ip, starttime to the Users table.
         :param ip: str
@@ -65,16 +65,17 @@ class Odbc:
         cursor.close()
         conn.close()
 
-    def insert_to_whitelist(self, ip: str, starttime: datetime):
+    def insert_to_whitelist(self, ip: str, starttime: datetime, packetssent: int):
         """
         inserts the received ip, starttime to the WhiteList table.
         :param ip: str
         :param starttime: datetime
+        :param packetssent: int
         :return: nothing
         """
         conn, cursor = self.__connect()
-        cursor.execute("INSERT INTO WhiteList (userIP, startdate) VALUES (?, ?)",
-                       (ip, starttime))
+        cursor.execute("INSERT INTO WhiteList (userIP, startdate, packetssent) VALUES (?, ?, ?)",
+                       (ip, starttime, packetssent))
         # Commit changes
         conn.commit()
         cursor.close()
@@ -166,7 +167,7 @@ class Odbc:
         """
         conn, cursor = self.__connect()
         # cursor.execute(f"SELECT * FROM WhiteList WHERE userIP ='{ip}';")
-        cursor.execute(f"SELECT userIP FROM WhiteList WHERE userIP ='{ip}';")
+        cursor.execute(f"SELECT * FROM WhiteList WHERE userIP ='{ip}';")
         result = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -184,14 +185,19 @@ class Odbc:
         conn, cursor = self.__connect()
         cursor.execute(f"SELECT userIP FROM Users;")
         users_list = cursor.fetchall()
+        # print(users_list)
         for user in users_list:
+            # print(user)
             if not self.find_in_whitelist(user[0]):  # user not in Whitelist_users:
-                self.insert_to_blacklist(user[0], datetime.now())
+                # print(user[0])
+                if not self.find_in_blacklist(user[0]):
+                    print(f"BLOCKING USER: {user[0]} - users_check")
+                    self.insert_to_blacklist(user[0], datetime.now())
             self.delete_user(user[0], "Users")
         conn.commit()
         cursor.close()
         conn.close()
-    
+
     def whitelist_request_count(self):
         """
         gets all the users ip (userIP) from the WhiteList table.
@@ -354,3 +360,4 @@ class Odbc:
         conn.commit()
         cursor.close()
         conn.close()
+
