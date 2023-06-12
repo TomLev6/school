@@ -5,7 +5,7 @@ Date: 11/05/23
 from scapy.all import *
 from scapy.layers.inet import IP, TCP
 
-target_IP = '192.168.1.13'
+target_IP = '172.16.6.69'
 
 
 def filters(pkt: Packet):
@@ -57,7 +57,7 @@ def sr1_ignore_rst(p: Packet, inter=.0001, verbose=False) -> Union[Packet, None]
     return None
 
 
-while True:
+for _ in range(0, 10):
     """
     creates the syn packet then sends till getting response then sends the ack packet and waits for the last packet.
     """
@@ -77,13 +77,15 @@ while True:
 
             p2 = sniff(count=1, lfilter=filters, timeout=1)
 
-            if Raw in last_ans.layers() and last_ans is not None and TCP in\
+            if Raw in last_ans.layers() and last_ans is not None and TCP in \
                     last_ans.layers() and last_ans[TCP].flags not in ["RA", "R"]:
                 print(p2[Raw].load.decode())
             elif p2:
                 p2 = p2[0]
                 if Raw in p2.layers():
                     print(p2[Raw].load.decode())
+            else:
+                print("you have moved to the whitelist!")
 
         else:
             print("None")
