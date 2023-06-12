@@ -34,7 +34,7 @@ class Odbc:
         # Create a cursor
         return conn, conn.cursor()
 
-  def insert_new_user(self, ip: str, starttime: datetime):
+    def insert_new_user(self, ip: str, starttime: datetime):
         """
         inserts the received ip, starttime to the Users table.
         :param ip: str
