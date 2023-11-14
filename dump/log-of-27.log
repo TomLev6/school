@@ -1,0 +1,477 @@
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+ERROR:root:received socket exception - [WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+INFO:root:Client sent execute
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent execute
+INFO:root:Client sent dir
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent copy
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent delete
+CRITICAL:root:received socket exception - [WinError 2] The system cannot find the file specified: 'C:\\Cyber\\bliblu.txt'
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+INFO:root:Client sent exit
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent exit
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+INFO:root:Client sent exit
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent dir
+INFO:root:Client sent dir
+INFO:root:Client sent dir
+INFO:root:Client sent dir
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+INFO:root:Client sent send photo
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 46, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent delete
+CRITICAL:root:received socket exception - [WinError 2] The system cannot find the file specified: 'C:\\Cyber\\1wod.docx'
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent copy
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent copy
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent copy
+CRITICAL:root:received socket exception - [Errno 13] Permission denied: 'C:\\Cyber/blabla.txt'
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent copy
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+INFO:root:Client sent take screenshot
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent take screenshot
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:Client sent delete
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent delete
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent delete
+CRITICAL:root:received socket exception - [WinError 2] The system cannot find the file specified: 'C:\\Cyber\\To.txt'
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent execute
+INFO:root:Client sent copy
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent copy
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent copy
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+ERROR:root:received socket exception -[WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\Users\yonat\PycharmProjects\2.7\Server.py", line 147, in main
+    data = client_socket.recv(CON).decode()
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent exit
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent delete
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
+INFO:root:Client sent dir
+INFO:root:Client sent delete
+CRITICAL:root:received socket exception - [WinError 10054] An existing connection was forcibly closed by the remote host
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent delete
+CRITICAL:root:received socket exception - [WinError 2] The system cannot find the file specified: 'C:\\Cyber\\rr.txt'
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent delete
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent take screenshot
+INFO:root:Client sent send photo
+INFO:root:
+
+INFO:root:Listening for connections on port 8820
+DEBUG:root:New connection received..
+INFO:root:Client connected
+INFO:root:Client sent dir
